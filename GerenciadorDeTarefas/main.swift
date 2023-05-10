@@ -7,5 +7,10 @@
 
 import Foundation
 
-print("Hello, World!")
-
+class Main{
+    init() {
+        print("Comecou")
+        _ = AtividadeController()
+    }
+}
+_ = Main()
