@@ -9,8 +9,7 @@ import Foundation
 
 class Main{
     init() {
-        print("Comecou")
-        _ = AtividadeController()
+        AtividadeController().didLoad()
     }
 }
 _ = Main()
