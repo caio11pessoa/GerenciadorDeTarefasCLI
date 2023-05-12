@@ -14,6 +14,7 @@ class AtividadeView {
             [a] - Ver minhas atividades
             [b] - Adicionar atividade
             [c] - Buscar atividade
+            
             [e] - Exit
             """)
     }
@@ -52,8 +53,8 @@ class AtividadeView {
     func delete() {
         print("""
             Você deseja deletar essa atividade?
-            [s]: Sim
-            [n]: Não raleu mofi
+            [s] -  Sim
+            [n] -  Não raleu mofi
             """)
         
     }
@@ -68,5 +69,36 @@ class AtividadeView {
                 """)
         }
         print("----------------------------------------------")
+    }
+    func options() {
+        print("""
+                O que voce deseja fazer?
+                [a] - Editar a tarefa
+                [b] - Marcar como concluida
+                [c] - Deletar tarefa
+                
+                [e] - Voltar para o menu
+                """)
+    }
+    func editar(){
+        print("""
+              O que voce deseja editar?
+              [a] - Nome
+              [b] - Descricao
+              
+              [e] - Sair
+              """)
+    }
+    func telaEdicao(atributo: String, atributoAntigo: String){
+        print("""
+            -\(atributo) anterior: \(atributoAntigo)
+            - Digite o valor que deseja: 
+            """)
+    }
+    
+    func concluir(atividade nome: String){
+        print("""
+            Atividade \(nome) concluída!!!
+            """)
     }
 }

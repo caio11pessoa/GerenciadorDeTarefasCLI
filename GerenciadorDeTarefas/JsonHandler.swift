@@ -8,33 +8,42 @@
 import Foundation
 class JsonHandler {
     let fileManager = FileManager.default
-    
-    func getJson() -> ListaAtividades?{
-        guard let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {return nil}
-        
-        let fileURL = documentDirectory.appendingPathComponent("tarefas.json")
-        
-        do {
-            let jsonData = try Data(contentsOf: fileURL)
-            let decoder = JSONDecoder()
-            let atividade = try decoder.decode(ListaAtividades.self, from: jsonData)
-            return atividade
-        }catch {
-            fatalError("Error Fatal")
+
+    func getJson() -> ListaAtividades? {
+        let nomeJson = "tarefas.json"
+        let fileManager = FileManager.default
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let jsonURL = documentsURL.appendingPathComponent(nomeJson)
+        print(jsonURL)
+
+        if fileManager.fileExists(atPath: jsonURL.path){
+            do {
+                let jsonData = try Data(contentsOf: jsonURL)
+                let decoder = JSONDecoder()
+                let atividade = try decoder.decode(ListaAtividades.self, from: jsonData)
+                return atividade
+            } catch {
+                print(ErrorHandler.arquivoCorrompido.rawValue)
+                return nil
+           }
+        } else {
+            do {
+                try "".write(to: jsonURL, atomically: true, encoding: .utf8)
+                return ListaAtividades(tarefas:[])
+            } catch {
+                return nil
+            }
         }
-        
     }
+
     
     func postJson(_ atividades : ListaAtividades) {
         guard let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         
         let fileURL = documentDirectory.appendingPathComponent("tarefas.json")
-        print(fileURL)
         let data = try! JSONEncoder().encode(atividades)
-        print(data)
         do{
             try! data.write(to: fileURL)
         }
     }
 }
-

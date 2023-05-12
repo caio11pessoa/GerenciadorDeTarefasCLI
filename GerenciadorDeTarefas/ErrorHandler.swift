@@ -12,4 +12,5 @@ enum ErrorHandler: String {
     case nomeVazio = "Nome não pode ser vazio"
     case descricaoVazio = "Descricao não pode ser vazio"
     case indiceNaoExiste = "Índice não existe"
+    case arquivoCorrompido = "Arquivo Corrompido, dados perdidos 😮‍💨"
 }

@@ -10,7 +10,13 @@ import Foundation
 class AtividadeController {
     let atividadeView: AtividadeView = AtividadeView()
 
-    lazy var mockAtividades: ListaAtividades = jsonHandler.getJson()!
+    //TODO tirar o force
+    lazy var listaDeAtividades: ListaAtividades = {
+        guard let atividades = jsonHandler.getJson() else {
+            return ListaAtividades(tarefas: [])
+        }
+        return atividades
+    }()
         
     let jsonHandler = JsonHandler()
     
@@ -23,7 +29,7 @@ class AtividadeController {
         switch acao {
         case "a","A":
             //TODO:: Formatar bonitinho
-            atividadeView.printAtividade(atividades: mockAtividades.tarefas)
+            atividadeView.printAtividade(atividades: listaDeAtividades.tarefas)
             _ = readLine()
             print("\n\n\n")
             didLoad()
@@ -41,7 +47,7 @@ class AtividadeController {
             print("\n\n\n")
             didLoad()
         case "e", "E":
-            jsonHandler.postJson(mockAtividades)
+            jsonHandler.postJson(listaDeAtividades)
         default:
             print( ErrorHandler.opcaoNaoExiste.rawValue)
             didLoad()
@@ -69,7 +75,7 @@ class AtividadeController {
         }
         
         let newAtividade = Atividade(nome: newName, descricao: newDescription, feito: false)
-        mockAtividades.tarefas.append(newAtividade)
+        listaDeAtividades.tarefas.append(newAtividade)
         return newAtividade
     }
     
@@ -81,7 +87,7 @@ class AtividadeController {
             return []
         }
         
-        let listaAtividades = mockAtividades.tarefas
+        let listaAtividades = listaDeAtividades.tarefas
         let listaAtividaesFilter = listaAtividades.filter { $0.nome == searchName}
         
         return listaAtividaesFilter
@@ -100,14 +106,72 @@ class AtividadeController {
             print(ErrorHandler.indiceNaoExiste)
             return atividadeOptions(atividades)
         }
-        atividadeView.delete()
-        guard let confirmDelete: String = readLine() else {
-            return didLoad()
+        atividadeAcoes(indice)
+        
+    }
+    func atividadeAcoes(_ indice: Int){
+        atividadeView.options()
+        
+        guard let acao: String = readLine() else {
+            return atividadeAcoes(indice)
         }
-        if(confirmDelete == "s"){
-            mockAtividades.tarefas.remove(at: indice)
+        switch acao {
+        case "a", "A":
+            editarTarefa(indice)
+        case "b", "B":
+            concluir(atividade: indice)
+        case "c", "C":
+            deletar(atividade: indice)
+        case "e", "E":
             didLoad()
+        default:
+            print(ErrorHandler.opcaoNaoExiste.rawValue)
+            return atividadeAcoes(indice)
+        }
+        
+    }
+    func editarTarefa(_ indice: Int) {
+        atividadeView.editar()
+        
+        guard let acao: String = readLine() else {
+            return editarTarefa(indice)
+        }
+        switch acao {
+        case "a", "A":
+            atividadeView.telaEdicao(atributo: "Nome", atributoAntigo: listaDeAtividades.tarefas[indice].nome)
+            guard let novoNome: String = readLine() else {
+                return editarTarefa(indice)
+            }
+            listaDeAtividades.tarefas[indice].nome = novoNome
+        case "b", "B":
+            atividadeView.telaEdicao(atributo: "Descrição", atributoAntigo: listaDeAtividades.tarefas[indice].descricao)
+            guard let novaDescricao: String = readLine() else {
+                return editarTarefa(indice)
+            }
+            listaDeAtividades.tarefas[indice].descricao = novaDescricao
+        case "e", "E":
+            didLoad()
+        default:
+            print(ErrorHandler.opcaoNaoExiste.rawValue)
+            return editarTarefa(indice)
         }
     }
     
+    func concluir(atividade indice:Int ){
+        listaDeAtividades.tarefas[indice].feito.toggle()
+        atividadeView.concluir(atividade: listaDeAtividades.tarefas[indice].nome)
+        atividadeAcoes(indice)
+    }
+    
+    func deletar(atividade indice:Int) {
+                atividadeView.delete()
+                guard let confirmDelete: String = readLine() else {
+                    return deletar(atividade: indice )
+                }
+                if(confirmDelete == "s"){
+                    listaDeAtividades.tarefas.remove(at: indice)
+                    print("Atividade deletada com sucesso")
+                    didLoad()
+                }
+    }
 }

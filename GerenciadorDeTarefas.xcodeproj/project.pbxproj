@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		641A3CDC2A0B1F90008C98BC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641A3CDB2A0B1F90008C98BC /* main.swift */; };
+		6463DCCF2A0D9C8000AE724F /* JsonHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6463DCCE2A0D9C8000AE724F /* JsonHandler.swift */; };
+		6463DCD22A0DB58D00AE724F /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6463DCD12A0DB58D00AE724F /* ErrorHandler.swift */; };
 		649B51012A0C4CA100DF1BAE /* AtividadeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 649B51002A0C4CA100DF1BAE /* AtividadeModel.swift */; };
 		649B51032A0C4EC400DF1BAE /* AtividadeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 649B51022A0C4EC400DF1BAE /* AtividadeController.swift */; };
 		649B51052A0C504500DF1BAE /* AtividadeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 649B51042A0C504500DF1BAE /* AtividadeView.swift */; };
@@ -28,6 +30,8 @@
 /* Begin PBXFileReference section */
 		641A3CD82A0B1F90008C98BC /* GerenciadorDeTarefas */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GerenciadorDeTarefas; sourceTree = BUILT_PRODUCTS_DIR; };
 		641A3CDB2A0B1F90008C98BC /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		6463DCCE2A0D9C8000AE724F /* JsonHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonHandler.swift; sourceTree = "<group>"; };
+		6463DCD12A0DB58D00AE724F /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
 		649B51002A0C4CA100DF1BAE /* AtividadeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtividadeModel.swift; sourceTree = "<group>"; };
 		649B51022A0C4EC400DF1BAE /* AtividadeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtividadeController.swift; sourceTree = "<group>"; };
 		649B51042A0C504500DF1BAE /* AtividadeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtividadeView.swift; sourceTree = "<group>"; };
@@ -67,6 +71,8 @@
 				649B51002A0C4CA100DF1BAE /* AtividadeModel.swift */,
 				649B51022A0C4EC400DF1BAE /* AtividadeController.swift */,
 				649B51042A0C504500DF1BAE /* AtividadeView.swift */,
+				6463DCCE2A0D9C8000AE724F /* JsonHandler.swift */,
+				6463DCD12A0DB58D00AE724F /* ErrorHandler.swift */,
 			);
 			path = GerenciadorDeTarefas;
 			sourceTree = "<group>";
@@ -130,7 +136,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				649B51052A0C504500DF1BAE /* AtividadeView.swift in Sources */,
+				6463DCCF2A0D9C8000AE724F /* JsonHandler.swift in Sources */,
 				641A3CDC2A0B1F90008C98BC /* main.swift in Sources */,
+				6463DCD22A0DB58D00AE724F /* ErrorHandler.swift in Sources */,
 				649B51012A0C4CA100DF1BAE /* AtividadeModel.swift in Sources */,
 				649B51032A0C4EC400DF1BAE /* AtividadeController.swift in Sources */,
 			);
