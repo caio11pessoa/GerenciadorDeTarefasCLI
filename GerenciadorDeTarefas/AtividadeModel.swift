@@ -11,10 +11,10 @@ struct Atividade: Codable {
     var nome: String
     var descricao: String
     var feito: Bool
-    var data: Date?
+    var data: String?
 }
 
 struct ListaAtividades: Codable {
-    var ativdades: [Atividade]
+    var tarefas: [Atividade]
 }
 

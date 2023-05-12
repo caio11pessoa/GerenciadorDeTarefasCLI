@@ -43,7 +43,7 @@ class AtividadeView {
     }
     
     func opcoesAtividades(quantidade: Int) {
-        print("Você deseja selecionar alguma atividade?")
+        print("\nVocê deseja selecionar alguma atividade?\nSe não, digite qualquer coisa para voltar ao menu principal")
         for i in 0..<quantidade {
             print("Atividade \(i + 1)")
         }
@@ -56,5 +56,17 @@ class AtividadeView {
             [n]: Não raleu mofi
             """)
         
+    }
+    func printAtividade(atividades: [Atividade]){
+        print("Atividades:")
+        for atividade in atividades {
+            print("""
+                ----------------------------------------------
+                Nome da atividade: \(atividade.nome)
+                Descrição da atividade: \(atividade.descricao)
+                Feita: \(atividade.feito)
+                """)
+        }
+        print("----------------------------------------------")
     }
 }
