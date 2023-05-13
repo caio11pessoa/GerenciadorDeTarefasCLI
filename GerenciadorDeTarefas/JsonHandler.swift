@@ -14,7 +14,6 @@ class JsonHandler {
         let fileManager = FileManager.default
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let jsonURL = documentsURL.appendingPathComponent(nomeJson)
-        print(jsonURL)
 
         if fileManager.fileExists(atPath: jsonURL.path){
             do {
@@ -38,12 +37,15 @@ class JsonHandler {
 
     
     func postJson(_ atividades : ListaAtividades) {
-        guard let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-        
-        let fileURL = documentDirectory.appendingPathComponent("tarefas.json")
-        let data = try! JSONEncoder().encode(atividades)
-        do{
-            try! data.write(to: fileURL)
+        let nomeJson = "tarefas.json"
+        let fileManager = FileManager.default
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let jsonURL = documentsURL.appendingPathComponent(nomeJson)
+        do {
+            let data = try JSONEncoder().encode(atividades)
+            try data.write(to: jsonURL)
+        } catch {
+            return
         }
     }
 }

@@ -28,23 +28,24 @@ class AtividadeController {
         }
         switch acao {
         case "a","A":
-            //TODO:: Formatar bonitinho
-            atividadeView.printAtividade(atividades: listaDeAtividades.tarefas)
-            _ = readLine()
-            print("\n\n\n")
+            atividadeView.opcoesVer()
+            verTarefas()
+            atividadeView.pressToContinue()
             didLoad()
         case "b", "B":
-            //TODO tirar o force
-            print(atividadeCreate()!)
-            _ = readLine()
-            print("\n\n\n")
+            guard let tarefa = atividadeCreate() else {
+                print(ErrorHandler.arquivoCorrompido)
+                return didLoad()
+            }
+            atividadeView.printAtividade(atividades: [tarefa])
+
+            atividadeView.pressToContinue()
             didLoad()
         case "c", "C":
             let atividades = atividadeGet()
             atividadeView.printAtividade(atividades: atividades)
             atividadeOptions(atividades)
-            _ = readLine()
-            print("\n\n\n")
+            atividadeView.pressToContinue()
             didLoad()
         case "e", "E":
             jsonHandler.postJson(listaDeAtividades)
@@ -173,5 +174,24 @@ class AtividadeController {
                     print("Atividade deletada com sucesso")
                     didLoad()
                 }
+    }
+    
+    func verTarefas(){
+        guard let acao: String = readLine() else {
+            return verTarefas()
+        }
+        switch acao{
+        case "a", "A":
+            atividadeView.printAtividade(atividades: listaDeAtividades.tarefas)
+        case "b", "B":
+            let atividadesCompletas = listaDeAtividades.tarefas.filter({$0.feito})
+            atividadeView.printAtividade(atividades: atividadesCompletas)
+        case "c", "C":
+            let atividadesNaoCompletas = listaDeAtividades.tarefas.filter({!$0.feito})
+            atividadeView.printAtividade(atividades: atividadesNaoCompletas)
+        default:
+            print(ErrorHandler.opcaoNaoExiste)
+            verTarefas()
+        }
     }
 }

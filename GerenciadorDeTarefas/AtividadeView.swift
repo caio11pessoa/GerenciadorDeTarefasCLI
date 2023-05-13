@@ -15,7 +15,7 @@ class AtividadeView {
             [b] - Adicionar atividade
             [c] - Buscar atividade
             
-            [e] - Exit
+            [e] - Sair
             """)
     }
     
@@ -77,7 +77,7 @@ class AtividadeView {
                 [b] - Marcar como concluida
                 [c] - Deletar tarefa
                 
-                [e] - Voltar para o menu
+                [e] - Sair
                 """)
     }
     func editar(){
@@ -100,5 +100,19 @@ class AtividadeView {
         print("""
             Atividade \(nome) concluída!!!
             """)
+    }
+    func opcoesVer() {
+        print("""
+             Quais tarefas voce deseja ver?
+            [a] - Todas
+            [b] - Cumpridas
+            [c] - Nao cumpridas
+            
+            [e] - Sair
+            """)
+    }
+    func pressToContinue(){
+        _ = readLine()
+        print("\n\n\n")
     }
 }
