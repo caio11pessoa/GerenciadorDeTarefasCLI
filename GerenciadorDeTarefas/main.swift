@@ -1,3 +1,4 @@
+
 //
 //  main.swift
 //  GerenciadorDeTarefas
@@ -9,7 +10,8 @@ import Foundation
 
 class Main{
     init() {
-        AtividadeController().didLoad()
+        AtividadeView().menuBoasVindas()
+        AtividadeController().inicio()
     }
 }
 _ = Main()

@@ -7,14 +7,17 @@
 
 import Foundation
 
-struct Atividade: Codable {
+struct Atividade: Codable, Equatable {
+    var numero: Int
     var nome: String
     var descricao: String
     var feito: Bool
-    var data: String?
+
+  static func == (dentro: Atividade, fora: Atividade) -> Bool {
+        return dentro.nome == fora.nome && dentro.descricao == fora.descricao && dentro.feito == fora.feito
+  }
 }
 
 struct ListaAtividades: Codable {
     var tarefas: [Atividade]
 }
-

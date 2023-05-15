@@ -9,113 +9,102 @@ import Foundation
 
 class AtividadeController {
     let atividadeView: AtividadeView = AtividadeView()
-
-    //TODO tirar o force
+    
     lazy var listaDeAtividades: ListaAtividades = {
         guard let atividades = jsonHandler.getJson() else {
             return ListaAtividades(tarefas: [])
         }
         return atividades
     }()
-        
+    
     let jsonHandler = JsonHandler()
     
-    func didLoad() {
-       
-        atividadeView.display()
+    func inicio() {
+        
+        atividadeView.menuPrincipal()
         guard let acao: String = readLine() else {
-            return didLoad()
+            return inicio()
         }
         switch acao {
         case "a","A":
             atividadeView.opcoesVer()
             verTarefas()
-            atividadeView.pressToContinue()
-            didLoad()
+            atividadeView.enterParaSeguir()
+            inicio()
         case "b", "B":
-            guard let tarefa = atividadeCreate() else {
+            guard let tarefa = criarNovaAtividade() else {
                 print(ErrorHandler.arquivoCorrompido)
-                return didLoad()
+                return inicio()
             }
-            atividadeView.printAtividade(atividades: [tarefa])
-
-            atividadeView.pressToContinue()
-            didLoad()
+            atividadeView.mostrarAtividade(atividades: [tarefa])
+            jsonHandler.postJson(listaDeAtividades)
+            atividadeView.enterParaSeguir()
+            inicio()
         case "c", "C":
-            let atividades = atividadeGet()
-            atividadeView.printAtividade(atividades: atividades)
-            atividadeOptions(atividades)
-            atividadeView.pressToContinue()
-            didLoad()
+            atividadeView.mostrarAtividade(atividades: listaDeAtividades.tarefas)
+            atividadeView.busca()
+            let indice = acharIndiceAtividade()
+            atividadeAcoes(indice)
+            jsonHandler.postJson(listaDeAtividades)
+            atividadeView.enterParaSeguir()
+            inicio()
         case "e", "E":
             jsonHandler.postJson(listaDeAtividades)
+            print("Adeus :c")
+            return
         default:
             print( ErrorHandler.opcaoNaoExiste.rawValue)
-            didLoad()
+            inicio()
         }
     }
     
-    func atividadeCreate() -> Atividade? {
-        atividadeView.createName()
+    func criarNovaAtividade() -> Atividade? {
+        atividadeView.criarNome()
         
-        
-        guard let newName: String = readLine() else {
+        guard let novoNome: String = readLine() else {
             print(ErrorHandler.nomeVazio.rawValue)
-            return atividadeCreate()
+            return criarNovaAtividade()
         }
         
-        if(newName == ""){
+        if(novoNome == ""){
             print(ErrorHandler.nomeVazio.rawValue)
-            return atividadeCreate()
+            return criarNovaAtividade()
         }
         
-        atividadeView.createDescription()
-        guard let newDescription: String = readLine() else {
+        atividadeView.criarDescricao()
+        guard let novaDescricao: String = readLine() else {
             print(ErrorHandler.nomeVazio.rawValue)
-            return atividadeCreate()
+            return criarNovaAtividade()
         }
         
-        let newAtividade = Atividade(nome: newName, descricao: newDescription, feito: false)
+        let newAtividade = Atividade(numero: listaDeAtividades.tarefas.count + 1 ,nome: novoNome, descricao: novaDescricao, feito: false)
         listaDeAtividades.tarefas.append(newAtividade)
         return newAtividade
     }
     
-    func atividadeGet() -> [Atividade] {
-        
-        atividadeView.busca()
-
-        guard let searchName: String = readLine() else {
-            return []
+    func acharIndiceAtividade() -> Int{
+        while(true){
+            guard let numeroString = readLine() else {
+                continue
+            }
+            guard let numeroAchar: Int = Int(numeroString) else{
+                inicio()
+                continue
+            }
+            guard let indice: Int = listaDeAtividades.tarefas.firstIndex(where: { $0.numero == numeroAchar}) else{
+                print("\n! Numero invalido !")
+                continue
+            }
+            return indice
         }
-        
-        let listaAtividades = listaDeAtividades.tarefas
-        let listaAtividaesFilter = listaAtividades.filter { $0.nome == searchName}
-        
-        return listaAtividaesFilter
-    }
-    
-    func atividadeOptions(_ atividades: [Atividade]) {
-        atividadeView.opcoesAtividades(quantidade: atividades.count)
-        guard let opcao: String = readLine() else {
-            return atividadeOptions(atividades)
-        }
-        guard var indice: Int = Int(opcao) else {
-            return didLoad()
-        }
-        indice -= 1
-        if(indice < 0 || indice >= atividades.count) {
-            print(ErrorHandler.indiceNaoExiste)
-            return atividadeOptions(atividades)
-        }
-        atividadeAcoes(indice)
-        
     }
     func atividadeAcoes(_ indice: Int){
-        atividadeView.options()
+        atividadeView.opcoesEditar()
         
         guard let acao: String = readLine() else {
             return atividadeAcoes(indice)
         }
+        
         switch acao {
         case "a", "A":
             editarTarefa(indice)
@@ -124,13 +113,13 @@ class AtividadeController {
         case "c", "C":
             deletar(atividade: indice)
         case "e", "E":
-            didLoad()
+            inicio()
         default:
             print(ErrorHandler.opcaoNaoExiste.rawValue)
             return atividadeAcoes(indice)
         }
-        
     }
+    
     func editarTarefa(_ indice: Int) {
         atividadeView.editar()
         
@@ -151,11 +140,12 @@ class AtividadeController {
             }
             listaDeAtividades.tarefas[indice].descricao = novaDescricao
         case "e", "E":
-            didLoad()
+            inicio()
         default:
             print(ErrorHandler.opcaoNaoExiste.rawValue)
             return editarTarefa(indice)
         }
+        print("\n> Tarefa editada com sucesso!")
     }
     
     func concluir(atividade indice:Int ){
@@ -165,15 +155,22 @@ class AtividadeController {
     }
     
     func deletar(atividade indice:Int) {
-                atividadeView.delete()
-                guard let confirmDelete: String = readLine() else {
-                    return deletar(atividade: indice )
-                }
-                if(confirmDelete == "s"){
-                    listaDeAtividades.tarefas.remove(at: indice)
-                    print("Atividade deletada com sucesso")
-                    didLoad()
-                }
+        atividadeView.delete()
+        guard let confirmarDelete: String = readLine() else {
+            return deletar(atividade: indice )
+        }
+        if(confirmarDelete == "s" || confirmarDelete == "S"){
+            listaDeAtividades.tarefas.remove(at: indice)
+            print("> Atividade deletada com sucesso")
+            darNumero()
+            inicio()
+        } else if(confirmarDelete == "n" || confirmarDelete == "N"){
+            print("> Operacao cancelada")
+            atividadeAcoes(indice)
+        } else {
+            print(ErrorHandler.opcaoNaoExiste.rawValue)
+            deletar(atividade: indice)
+        }
     }
     
     func verTarefas(){
@@ -182,16 +179,25 @@ class AtividadeController {
         }
         switch acao{
         case "a", "A":
-            atividadeView.printAtividade(atividades: listaDeAtividades.tarefas)
+            atividadeView.mostrarAtividade(atividades: listaDeAtividades.tarefas)
         case "b", "B":
             let atividadesCompletas = listaDeAtividades.tarefas.filter({$0.feito})
-            atividadeView.printAtividade(atividades: atividadesCompletas)
+            atividadeView.mostrarAtividade(atividades: atividadesCompletas)
         case "c", "C":
             let atividadesNaoCompletas = listaDeAtividades.tarefas.filter({!$0.feito})
-            atividadeView.printAtividade(atividades: atividadesNaoCompletas)
+            atividadeView.mostrarAtividade(atividades: atividadesNaoCompletas)
+        case "e", "E":
+            inicio()
         default:
             print(ErrorHandler.opcaoNaoExiste)
             verTarefas()
         }
     }
+    
+    func darNumero() {
+        for i in 0..<listaDeAtividades.tarefas.count{
+            listaDeAtividades.tarefas[i].numero = i+1
+        }
+    }
+    
 }

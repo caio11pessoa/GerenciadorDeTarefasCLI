@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 class JsonHandler {
     let fileManager = FileManager.default
 

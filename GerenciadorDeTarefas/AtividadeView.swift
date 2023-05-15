@@ -8,111 +8,184 @@
 import Foundation
 
 class AtividadeView {
-    func display() {
-        print("""
-            O que voce deseja fazer??
+    func menuBoasVindas() {
+       print("""
+              
+              @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+              |''''''''''''''''''''''''''''''''''''|`
+              |                                    ||
+              |                                    ||
+              |                                    ||
+              |                                    ||
+              |                                    ||
+              |           Bem vindo ao             ||
+              |       Terminal de Tarefas™         ||
+              |                                    ||
+              |                                    ||
+              |                                    ||
+              |                                    ||
+              |                                    ||
+              |                                    ||
+              |____________________________________||
+              `=====================================`
+              
+              > Pressione ENTER para começar
+              """)
+        _ = readLine()
+    }
+    
+    func menuPrincipal() {
+      print("""
+            
+            > O que voce deseja fazer??
+            
             [a] - Ver minhas atividades
             [b] - Adicionar atividade
-            [c] - Buscar atividade
+            [c] - Editar atividades
             
             [e] - Sair
             """)
     }
     
-    func createName() {
-        print("""
-            Escolha o nome para a sua atividade:
+    func criarNome() {
+      print("""
+              
+            > Escolha o nome para a sua nova atividade(max: 33 caracteres):
             """)
     }
     
-    func createDescription() {
-        print("""
-            Escolha a descrição para a sua atividade:
-            """)
-    }
-
-    func createData() {
-        print("""
-            Coloque a data, se quiser, se n quiser blz, só passa direto, blz?:
+    func criarDescricao() {
+      print("""
+            > Opcional:
+            > Escolha a descrição para a sua nova atividade(max: 100 caracteres):
             """)
     }
     
     func busca() {
-        print("""
-            digite o nome da atividade:
+      print("""
+              
+            > Digite o NUMERO da atividade que deseja selecionar:
+            > Ou digite qualquer coisa para voltar ao menu.
             """)
-    }
-    
-    func opcoesAtividades(quantidade: Int) {
-        print("\nVocê deseja selecionar alguma atividade?\nSe não, digite qualquer coisa para voltar ao menu principal")
-        for i in 0..<quantidade {
-            print("Atividade \(i + 1)")
-        }
     }
     
     func delete() {
-        print("""
-            Você deseja deletar essa atividade?
+      print("""
+              
+            > A atividade selecionada será apagada para SEMPRE(um longo tempo)
+            > Tem certeza que deseja continuar?
+              
             [s] -  Sim
             [n] -  Não raleu mofi
             """)
-        
     }
-    func printAtividade(atividades: [Atividade]){
-        print("Atividades:")
+  
+    func mostrarAtividade(atividades: [Atividade]){
+        let frase = atividades.count == 0 ? "\n> Nenhuma atividade ainda!\n" : "\n> Essas são suas atividades:\n"
+        print(frase)
         for atividade in atividades {
-            print("""
-                ----------------------------------------------
-                Nome da atividade: \(atividade.nome)
-                Descrição da atividade: \(atividade.descricao)
-                Feita: \(atividade.feito)
+          let espaco = "                                     "
+          let feitoFrase = atividade.feito ? "Concluida" : "Nao concluida"
+          var subDescricoes = [String]()
+          var indiceAgora = atividade.descricao.startIndex
+          
+          for i in 0..<3 {
+            let tamanho = (i == 0 ? 33 : 35)
+            let indiceFim = atividade.descricao.index(indiceAgora, offsetBy: tamanho, limitedBy: atividade.descricao.endIndex) ?? atividade.descricao.endIndex
+            let subdescricao = atividade.descricao[indiceAgora..<indiceFim]
+            subDescricoes.append(String(subdescricao))
+            indiceAgora = indiceFim
+          }
+
+          print("""
+                @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                |''''''''''''''''''''''''''''''''''''|`
+                | -Atividade \(atividade.numero)\(espaco.prefix(max(24 - String(atividade.numero).count,0)))||
+                |____________________________________||
+                | -\(atividade.nome.prefix(34))\(espaco.prefix(max(34 - atividade.nome.count,0)))||
+                |____________________________________||
+                | -\(subDescricoes[0].prefix(33))\(espaco.prefix(max(34 - subDescricoes[0].count,0)))||
+                |____________________________________||
+                | \(subDescricoes[1].prefix(35))\(espaco.prefix(max(35 - subDescricoes[1].count,0)))||
+                |____________________________________||
+                | \(subDescricoes[2].prefix(35))\(espaco.prefix(max(35 - subDescricoes[2].count,0)))||
+                |____________________________________||
+                | \(dataHora().prefix(34))\(espaco.prefix(max(35 - dataHora().count,0)))||
+                |____________________________________||
+                | \(feitoFrase.prefix(34))\(espaco.prefix(max(35 - feitoFrase.count,0)))||
+                |____________________________________||
+                `=====================================`
+
                 """)
         }
-        print("----------------------------------------------")
     }
-    func options() {
+    func opcoesEditar() {
         print("""
-                O que voce deseja fazer?
-                [a] - Editar a tarefa
-                [b] - Marcar como concluida
-                [c] - Deletar tarefa
                 
-                [e] - Sair
-                """)
+              > O que voce deseja fazer?
+              
+              [a] - Editar a atividade
+              [b] - Marcar como concluida
+              [c] - Deletar atividade
+              
+              [e] - Sair
+              """)
     }
+    
     func editar(){
         print("""
-              O que voce deseja editar?
+              
+              > O que voce deseja editar?
+              
               [a] - Nome
               [b] - Descricao
               
               [e] - Sair
               """)
     }
+    
     func telaEdicao(atributo: String, atributoAntigo: String){
         print("""
-            -\(atributo) anterior: \(atributoAntigo)
-            - Digite o valor que deseja: 
-            """)
+              
+              > \(atributo) anterior: \(atributoAntigo)
+              > Digite o novo valor que deseja:
+              """,terminator: "")
     }
     
     func concluir(atividade nome: String){
         print("""
-            Atividade \(nome) concluída!!!
-            """)
+              
+              ~ Atividade \(nome) concluída! Parabens!
+              """)
     }
+    
     func opcoesVer() {
-        print("""
-             Quais tarefas voce deseja ver?
+      print("""
+              
+            > Quais atividades voce deseja ver?
+              
             [a] - Todas
-            [b] - Cumpridas
-            [c] - Nao cumpridas
+            [b] - Concluidas
+            [c] - Nao concluidas
             
             [e] - Sair
             """)
     }
-    func pressToContinue(){
-        _ = readLine()
-        print("\n\n\n")
+    
+    func enterParaSeguir(){
+      print("> ENTER para continuar. . .", terminator: "")
+      _ = readLine()
+      print("\n\n\n")
     }
+
+    func dataHora() -> String{
+      let formatacao = DateFormatter()
+      formatacao.dateFormat = "dd-MM"
+      let diaMes = formatacao.string(from: Date())
+      formatacao.dateFormat = "HH-mm"
+      let horaSegundo = formatacao.string(from: Date())
+      return "Criado dia \(diaMes) às \(horaSegundo)"
+    }
+  
 }
+
