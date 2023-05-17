@@ -10,8 +10,7 @@ import Foundation
 
 class Main{
     init() {
-        AtividadeView().menuBoasVindas()
-        AtividadeController().inicio()
+        _ = AtividadeController()
     }
 }
 _ = Main()

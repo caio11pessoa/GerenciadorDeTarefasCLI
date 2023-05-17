@@ -9,7 +9,12 @@ import Foundation
 
 class AtividadeController {
     let atividadeView: AtividadeView = AtividadeView()
-    
+
+    init() {
+        atividadeView.menuBoasVindas()
+        inicio()
+    }
+
     lazy var listaDeAtividades: ListaAtividades = {
         guard let atividades = jsonHandler.getJson() else {
             return ListaAtividades(tarefas: [])
@@ -27,17 +32,11 @@ class AtividadeController {
         }
         switch acao {
         case "a","A":
-            atividadeView.opcoesVer()
             verTarefas()
             atividadeView.enterParaSeguir()
             inicio()
         case "b", "B":
-            guard let tarefa = criarNovaAtividade() else {
-                print(ErrorHandler.arquivoCorrompido)
-                return inicio()
-            }
-            atividadeView.mostrarAtividade(atividades: [tarefa])
-            jsonHandler.postJson(listaDeAtividades)
+            criarNovaAtividade()
             atividadeView.enterParaSeguir()
             inicio()
         case "c", "C":
@@ -58,13 +57,10 @@ class AtividadeController {
         }
     }
     
-    func criarNovaAtividade() -> Atividade? {
+    func criarNovaAtividade() {
         atividadeView.criarNome()
         
-        guard let novoNome: String = readLine() else {
-            print(ErrorHandler.nomeVazio.rawValue)
-            return criarNovaAtividade()
-        }
+        let novoNome: String = readLine() ?? ""
         
         if(novoNome == ""){
             print(ErrorHandler.nomeVazio.rawValue)
@@ -79,7 +75,9 @@ class AtividadeController {
         
         let newAtividade = Atividade(numero: listaDeAtividades.tarefas.count + 1 ,nome: novoNome, descricao: novaDescricao, feito: false)
         listaDeAtividades.tarefas.append(newAtividade)
-        return newAtividade
+        jsonHandler.postJson(listaDeAtividades)
+        atividadeView.mostrarAtividade(atividades: [newAtividade])
+        return
     }
     
     func acharIndiceAtividade() -> Int{
@@ -174,6 +172,7 @@ class AtividadeController {
     }
     
     func verTarefas(){
+        atividadeView.opcoesVer()
         guard let acao: String = readLine() else {
             return verTarefas()
         }
